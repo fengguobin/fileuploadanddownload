@@ -24,7 +24,7 @@ public class UploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	//定义可上传文件类型
-	private String Ext_Name = "jpg,txt";
+	private String Ext_Name = "jpg,txt,doc";
        
     
 
@@ -53,10 +53,16 @@ public class UploadServlet extends HttpServlet {
 			//2、创建文件上传解析器
 			ServletFileUpload upload = new ServletFileUpload(factory);
 			upload.setProgressListener(new ProgressListener(){     //设置文件监听器，监听文件上传进度
-				@Override
+				long num = 0;
 				public void update(long readedBytes , long totalBytes, int currentItem) {
 					// TODO Auto-generated method stub
-					System.out.println("当前已处理：" + readedBytes  + "-----------文件大小为：" + totalBytes + "--" + currentItem);
+					//System.out.println("当前已处理：" + readedBytes  + "-----------文件大小为：" + totalBytes + "--" + currentItem);
+				
+					long progress = readedBytes*100/totalBytes;
+					if(progress==num)
+						return;
+					num = progress;
+					System.out.println("上传进度:" + progress + "%");
 				}   	
 			});  
 			upload.setHeaderEncoding("utf-8");     //设置编码格式
@@ -91,6 +97,9 @@ public class UploadServlet extends HttpServlet {
 						message = message + "文件：" + fileName + "，上传文件大小超过限制大小：" + upload.getFileSizeMax() + "<br/>";
 						break;
 					}
+					
+					
+					//把文件写到指定的文件夹中
 					String saveFileName = makeFileName(fileName);  //保存文件名
 					InputStream is = item.getInputStream();
 					FileOutputStream out = new FileOutputStream(savePath + "\\" + saveFileName );

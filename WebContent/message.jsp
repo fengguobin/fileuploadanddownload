@@ -4,9 +4,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>消息提示</title>
+<title>message</title>
 </head>
 <body>
     ${message }
+    <a href = "${pageContext.request.contextPath }/listFile">goto listFile</a>
 </body>
 </html>
